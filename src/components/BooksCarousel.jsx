@@ -6,10 +6,10 @@ const RAPIDAPI_HOST = process.env.REACT_APP_RAPIDAPI_HOST;
 const BooksCarousel = () => {
   const [books, setBooks] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const loadingMessage = <h1>Loading...</h1>;
-  const errorMessage = <h1>{error}</h1>;
+  const [error, setError] = useState(false);
 
+  const loadingModal = <h1>Loading...</h1>;
+  const errorModal = <h1>Oops we have an Error:{error}</h1>;
   useEffect(() => {
     async function getBooks() {
       const options = {
@@ -19,52 +19,33 @@ const BooksCarousel = () => {
           "X-RapidAPI-Host": RAPIDAPI_HOST,
         },
       };
-
       try {
-        console.log("Fetching books from:", `${API_URL}/african`, options);
+        // console.log("fetch", fetch(`${API_URL}/african`, options));
         const response = await fetch(`${API_URL}/african`, options);
-
         if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Error response text:", errorText);
-          throw new Error(`Error: ${response.status} ${response.statusText}`);
+          // console.log("error", error);
+          throw new Error(`Error: ${response.statusText}`);
         }
+        const booksData = await response.json();
 
-        const jsonResponse = await response.json();
-        console.log("JSON Response:", jsonResponse);
-
-        if (jsonResponse && jsonResponse.data) {
-          setBooks(jsonResponse.data);
-        } else {
-          throw new Error("Data format error: No data property in response");
+        if (booksData) {
+          setBooks(booksData);
         }
-
         setLoading(false);
       } catch (error) {
-        console.error("Fetch Error:", error);
         setError(error.message);
-        setLoading(false);
       }
     }
 
     getBooks();
   }, []);
 
-  console.log("Environment Variables:", {
-    API_URL,
-    RAPIDAPI_HOST,
-    RAPIDAPI_KEY,
-    books,
-  });
-
   if (loading) {
-    return <h1>Loading...</h1>;
+    return loadingModal;
   }
-
   if (error) {
-    return <h1>Oops, we have an error: {error}</h1>;
+    return errorModal;
   }
-
   const booksList = (
     <div>
       <ul>
@@ -72,28 +53,17 @@ const BooksCarousel = () => {
           <div key={book.bookId}>
             <li>
               <h3>{book.title}</h3>
-            </li>
-            <li>{book.author}</li>
-            <img
-              className="book-cover"
-              src={book.imgUrl}
-              alt={`Book cover of ${book.title}`}
-            />
+            </li>{" "}
+            <img src={book.imgUrl} alt={book.title}></img>
+            <li>{book.authors}</li>
+            <img></img>
           </div>
         ))}
       </ul>
     </div>
   );
-
-  if (loading) {
-    return loadingMessage;
-  }
-
-  if (error) {
-    return errorMessage;
-  }
-
-  return <booksList />;
+  console.log([books]);
+  return <div>{booksList}</div>;
 };
 
 export default BooksCarousel;
