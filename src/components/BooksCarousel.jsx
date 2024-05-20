@@ -22,7 +22,7 @@ const BooksCarousel = () => {
         if (!response.ok) {
           throw new Error(`Error: ${response.statusText}`, options);
         }
-        const { data } = await results.json();
+        const { data } = await response.json();
         setBooks(data);
       } catch (error) {
         setError(error.message);
@@ -30,11 +30,8 @@ const BooksCarousel = () => {
     }
     getBooks();
   }, []);
-  return (
-    <div>
-      <h1>Books</h1>
-    </div>
-  );
+  console.log(books);
+  return <div>{/* <ul>{books.maps((book, (key = {book.})))}</ul> */}</div>;
 };
 
 export default BooksCarousel;
