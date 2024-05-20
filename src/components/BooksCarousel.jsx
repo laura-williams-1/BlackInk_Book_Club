@@ -90,7 +90,7 @@ const BooksCarousel = () => {
   }
 
   if (error) {
-    return <h1>Oops, we have an error: {error}</h1>;
+    return errorMessage;
   }
 
   return <booksList />;
