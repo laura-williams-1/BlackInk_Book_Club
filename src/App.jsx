@@ -1,10 +1,13 @@
 import "./App.css";
-
+import NavBar from "./components/NavBar";
+import BooksCarousel from "./components/BooksCarousel";
+import { Routes, Route } from "react-router-dom";
 function App() {
   return (
-    <>
-      <h1>BlackInk Book Club</h1>
-    </>
+    <div className="App">
+      <NavBar />
+      <BooksCarousel />
+    </div>
   );
 }
 
