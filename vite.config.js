@@ -8,7 +8,11 @@ export default defineConfig(({ command, mode }) => {
   return {
     // vite config
     define: {
-      __APP_ENV__: JSON.stringify(env.APP_ENV),
+      "process.env": {
+        API_URL: env.VITE_API_URL,
+        REACT_APP_RAPIDAPI_KEY: env.VITE_RAPIDAPI_KEY,
+        REACT_APP_RAPIDAPI_HOST: env.VITE_RAPIDAPI_HOST,
+      },
     },
     plugins: [react()],
   };
